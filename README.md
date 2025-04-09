@@ -1,6 +1,6 @@
 # RFE
 
-**RFE** is a desktop application built with [Tauri](https://tauri.app/), featuring a Rust-powered backend and a modern [Svelte](https://svelte.dev/) frontend.
+**RFE** is a desktop File Manager built with [Tauri](https://tauri.app/), using Rust as backend and [Svelte](https://svelte.dev/) for the frontend.
 
 ## Tech Stack
 
