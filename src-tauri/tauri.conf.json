@@ -13,7 +13,8 @@
     "windows": [
       {
         "title": "rfe",
-        "decorations": false
+        "decorations": false,
+        "visible": false
       }
     ],
     "security": {
