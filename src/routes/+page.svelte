@@ -1,16 +1,12 @@
 <script lang="ts">
-  import {invoke} from "@tauri-apps/api/core";
   import { getCurrentWindow } from '@tauri-apps/api/window';
 
-  let name = $state("");
-  let greetMsg = $state("");
   ShowWindow()
 
   async function ShowWindow(){
     console.log("Setting window visibility to true")
     await getCurrentWindow().show();
   }
-
 </script>
 
 <main>
