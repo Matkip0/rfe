@@ -1,17 +1,19 @@
 <script lang="ts">
-  import { invoke } from "@tauri-apps/api/core";
+  import {invoke} from "@tauri-apps/api/core";
+  import { getCurrentWindow } from '@tauri-apps/api/window';
 
   let name = $state("");
   let greetMsg = $state("");
+  ShowWindow()
 
-  async function greet(event: Event) {
-    event.preventDefault();
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    greetMsg = await invoke("greet", { name });
+  async function ShowWindow(){
+    console.log("Setting window visibility to true")
+    await getCurrentWindow().show();
   }
+
 </script>
 
-<main class="container">
+<main>
   <h1 class="text-3xl font-bold underline">
     Hello world!
   </h1>
