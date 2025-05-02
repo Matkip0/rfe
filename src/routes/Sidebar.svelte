@@ -6,7 +6,7 @@
     ];
 
     devices.forEach(device => {
-        device.color = device.progress >= 90 ? 'red' : 'blue';
+        device.color = device.progress >= 90 ? 'bg-rfe-red' : 'bg-rfe-blue';
     });
 </script>
 
@@ -53,7 +53,7 @@
                     <div class="device">
                         <h2 class="text-c text-sm font-extrabold mb-2">{device.name}</h2>
                         <div class="progress2 mb-3">
-                            <div class="progress-bar2 bg-rfe-{device.color}" style="width: {device.progress}%;"></div>
+                            <div class="progress-bar2 {device.color}" style="width: {device.progress}%;"></div>
                         </div>
                     </div>
                 {/each}
