@@ -6,15 +6,19 @@
     import Tab from './Tab.svelte';
 </script>
 
-<div class="app flex flex-col h-screen">
-    <Header />
-    <div class="flex flex-1">
-        <div class="w-72 bg-gray-700 p-4">
+<div class="text-rfe-text surface0 app flex flex-col h-screen">
+    <div class="border-b-2 bg-rfe-mantle border-rfe-surface0">
+        <Header />
+    </div>
+    <div class="bg-rfe-mantle flex flex-1">
+        <div class="w-56 p-4 border-r-2 border-rfe-surface0">
             <Sidebar />
         </div>
         <div class="flex-1 flex flex-col">
-            <Tab />
-            <main class="flex-1 p-6 bg-gray-900 text-white">
+            <div class="bg-rfe-base border-b-2 border-rfe-surface0">
+                <Tab />
+            </div>
+            <main class="bg-rfe-base flex-1 p-6">
                 {@render children()}
             </main>
         </div>
