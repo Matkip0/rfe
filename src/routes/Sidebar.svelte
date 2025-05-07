@@ -1,15 +1,15 @@
-<script>
+<script lang="ts">
+    // TODO: add rust functionality for finding devices
     const devices = [
-        { name: '999 GiB internal drive', progress: 43 },
-        { name: '512 GiB external drive', progress: 90 },
-        { name: '1 TB cloud storage', progress: 25 }
+        { name: '999 GiB internal drive', progress: 43, color: 'bg-rfe-blue' },
+        { name: '512 GiB external drive', progress: 90, color: 'bg-rfe-blue' },
+        { name: '1 TB cloud storage', progress: 25, color: 'bg-rfe-blue' }
     ];
 
     devices.forEach(device => {
         device.color = device.progress >= 90 ? 'bg-rfe-red' : 'bg-rfe-blue';
     });
 </script>
-
 
 <div class="no-select w-full flex flex-col rounded-lg overflow-hidden">
     <div class="mb-2">
