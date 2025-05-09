@@ -1,5 +1,6 @@
 <script lang="ts">
   import { getCurrentWindow } from '@tauri-apps/api/window';
+  import Columns from "./rfe-directory/Columns.svelte";
 
   ShowWindow()
 
@@ -10,9 +11,7 @@
 </script>
 
 <main>
-  <h1 class="text-3xl font-bold underline">
-    Hello world!
-  </h1>
+  <Columns/>
 </main>
 
 <style lang="postcss">
