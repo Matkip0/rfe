@@ -18,7 +18,7 @@
             <div class="bg-rfe-base border-b-2 border-rfe-surface0">
                 <Tab />
             </div>
-            <main class="bg-rfe-base flex-1 p-6 overflow-auto">
+            <main class="bg-rfe-base flex-1 overflow-auto">
                 {@render children()}
             </main>
         </div>
