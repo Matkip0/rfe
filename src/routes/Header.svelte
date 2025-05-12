@@ -16,12 +16,9 @@
 
     // TODO: Needs to be tested if working correctly
     async function toggleMaximize() {
-        if (isMaximized) {
-            appWindow.unmaximize();
-        } else {
-            appWindow.maximize();
-        }
-        isMaximized = !isMaximized;
+        appWindow.toggleMaximize()
+
+        isMaximized = await appWindow.isMaximized();
     }
 
     function close() {
