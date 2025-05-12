@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import {getCurrentWindow} from '@tauri-apps/api/window';
     import {onMount} from 'svelte';
 
