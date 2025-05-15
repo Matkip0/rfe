@@ -1,4 +1,5 @@
 <script lang="ts">
+    import {invoke} from "@tauri-apps/api/core";
     interface directory {
         itemCount: number
         path: string
@@ -23,42 +24,10 @@
         ascending: boolean
     }
 
-    let currentPath:string = ""
+    let currentPath: string = $state("/")
     let sorting: sorting = $state({sortBy: "name", ascending: true})
 
-    //Real data not a placeholder FR FR on god no cap
-    const items:item[] = $state([
-        {name: "test.txt", size: "2mb", modified: "1970-01-01", selected: false, file: {fileType: "test", filePath: "/bla/bla"}},
-        {name: "test2.txt", size: "24mb", modified: "1970-01-01", selected: false},
-        {name: "test3.txt", size: "1mb", modified: "1970-01-01", selected: false},
-        {name: "test4.txt", size: "8mb", modified: "1970-01-01", selected: false},
-        {name: "test5.txt", size: "3mb", modified: "1970-01-01", selected: false},
-        {name: "test.txt", size: "2mb", modified: "1970-01-01", selected: false},
-        {name: "test2.txt", size: "24mb", modified: "1970-01-01", selected: false},
-        {name: "test3.txt", size: "1mb", modified: "1970-01-01", selected: false},
-        {name: "test4.txt", size: "8mb", modified: "1970-01-01", selected: false},
-        {name: "test5.txt", size: "3mb", modified: "1970-01-01", selected: false},
-        {name: "test.txt", size: "2mb", modified: "1970-01-01", selected: false},
-        {name: "test2.txt", size: "24mb", modified: "1970-01-01", selected: false},
-        {name: "test3.txt", size: "1mb", modified: "1970-01-01", selected: false},
-        {name: "test4.txt", size: "8mb", modified: "1970-01-01", selected: false},
-        {name: "test5.txt", size: "3mb", modified: "1970-01-01", selected: false},
-        {name: "test.txt", size: "2mb", modified: "1970-01-01", selected: false},
-        {name: "test2.txt", size: "24mb", modified: "1970-01-01", selected: false},
-        {name: "test3.txt", size: "1mb", modified: "1970-01-01", selected: false},
-        {name: "test4.txt", size: "8mb", modified: "1970-01-01", selected: false},
-        {name: "test5.txt", size: "3mb", modified: "1970-01-01", selected: false},
-        {name: "test.txt", size: "2mb", modified: "1970-01-01", selected: false},
-        {name: "test2.txt", size: "24mb", modified: "1970-01-01", selected: false},
-        {name: "test3.txt", size: "1mb", modified: "1970-01-01", selected: false},
-        {name: "test4.txt", size: "8mb", modified: "1970-01-01", selected: false},
-        {name: "test5.txt", size: "3mb", modified: "1970-01-01", selected: false},
-        {name: "test.txt", size: "2mb", modified: "1970-01-01", selected: false},
-        {name: "test2.txt", size: "24mb", modified: "1970-01-01", selected: false},
-        {name: "test3.txt", size: "1mb", modified: "1970-01-01", selected: false},
-        {name: "test4.txt", size: "8mb", modified: "1970-01-01", selected: false},
-        {name: "test5.txt", size: "3mb", modified: "1970-01-01", selected: false},
-    ])
+    let items:item[] = $state([])
 
     function sortBy(value: string) {
         if (sorting.sortBy === value){
@@ -93,16 +62,29 @@
 
     }
 
-    function updatePath(newPath:string) {
+    async function updatePath(newPath:string) {
         try {
-            //TODO: call rust code the content of the updated path
+            //TODO: get data other then just names when you call rust code
             currentPath = newPath
+            await readDirectory()
         }
         catch (e) {
             //TODO: Error handling
         }
     }
 
+    async function readDirectory() {
+        let item_names : string[]
+        item_names = await invoke("read_directory", { currentPath });
+        items = [];
+        item_names.forEach(value => items.push({name: value,
+            size: "24mb",
+            modified: "1970-01-01",
+            selected: false,
+            file: {fileType: "test", filePath: "/bla/bla"}}))
+    }
+
+    readDirectory()
 </script>
 
 <div>
