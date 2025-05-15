@@ -27,7 +27,6 @@
     let currentPath: string = $state("/")
     let sorting: sorting = $state({sortBy: "name", ascending: true})
 
-    //Real data not a placeholder FR FR on god no cap
     let items:item[] = $state([])
 
     function sortBy(value: string) {
