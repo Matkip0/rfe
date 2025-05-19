@@ -1,7 +1,5 @@
 <script lang="ts">
-    // TODO: functionality for tab content
-    let tabs = ["Tab1", "Tab2", "Tab3"];
-    let activeTab = 0;
+    import { tabs, activeTab, addNewTab, deleteTab, setActiveTab } from './stores/tabs';
 
     let showContextMenu = false;
     let contextMenuX = 0;
@@ -14,24 +12,25 @@
     let containerEl: HTMLElement;
 
     function toggleTab(index: number) {
-        activeTab = index;
+        setActiveTab(index);
     }
 
-    function deleteTab(index: number) {
-        tabs = tabs.filter((_, i) => i !== index);
-        if (tabs.length > 0) {
-            if (activeTab >= tabs.length) {
-                activeTab = tabs.length - 1;
-            }
-        } else {
-            activeTab = 0;
+    function addHomeTab() {
+        addNewTab("Home");
+        showContextMenu = false;
+    }
+
+    function closeRightClickedTab() {
+        if (rightClickedTabIndex !== null) {
+            deleteTab(rightClickedTabIndex);
         }
+        showContextMenu = false;
     }
 
     function closeOtherTabs() {
         if (rightClickedTabIndex !== null) {
-            tabs = [tabs[rightClickedTabIndex]];
-            activeTab = 0;
+            tabs.set([$tabs[rightClickedTabIndex]]);
+            activeTab.set(0);
         }
         showContextMenu = false;
     }
@@ -45,21 +44,8 @@
         contextMenuY = event.clientY - rect.top;
 
         rightClickedTabIndex = index;
-        newTabName = tabs[index!] || "";
+        newTabName = $tabs[index!] || "";
         showContextMenu = true;
-    }
-
-    function addHomeTab() {
-        tabs = [...tabs, "Home"];
-        activeTab = tabs.length - 1;
-        showContextMenu = false;
-    }
-
-    function closeRightClickedTab() {
-        if (rightClickedTabIndex !== null) {
-            deleteTab(rightClickedTabIndex);
-        }
-        showContextMenu = false;
     }
 
     function openRenamePopup() {
@@ -73,7 +59,10 @@
 
     function renameTab() {
         if (rightClickedTabIndex !== null && newTabName.trim() !== "") {
-            tabs[rightClickedTabIndex] = newTabName.trim();
+            tabs.update(t => {
+                t[rightClickedTabIndex!] = newTabName.trim();
+                return t;
+            });
         }
         showRenamePopup = false;
     }
@@ -103,12 +92,12 @@
         role="button"
         tabindex="0"
 >
-    {#if tabs.length > 1}
+    {#if $tabs.length > 1}
         <div class="overflow-x-auto w-full">
             <div
                     class="grid auto-cols-fr gap-1 px-1 py-2"
                     style="grid-auto-flow: column; min-width: max-content;">
-                {#each tabs as tab, index (index)}
+                {#each $tabs as tab, index (index)}
                     <div class="relative min-w-[160px]" on:contextmenu={(e) => handleRightClick(e, index)} role="button"
                          tabindex="0">
                         <button
@@ -116,8 +105,8 @@
                                 on:click={() => toggleTab(index)}
                                 class={`w-full py-3 px-4 pr-8 inline-flex items-center justify-center gap-x-2 text-sm font-bold focus:z-10 border border-rfe-surface0
 								${index === 0 ? 'rounded-l-md' : ''}
-								${index === tabs.length - 1 ? 'rounded-r-md' : ''}
-								${activeTab === index ? 'bg-rfe-blue text-rfe-crust' : 'bg-transparent hover:bg-rfe-surface1 hover:text-rfe-crust'}`}>
+								${index === $tabs.length - 1 ? 'rounded-r-md' : ''}
+								${$activeTab === index ? 'bg-rfe-blue text-rfe-crust' : 'bg-transparent hover:bg-rfe-surface1 hover:text-rfe-crust'}`}>
                             {tab}
                         </button>
                         <button
