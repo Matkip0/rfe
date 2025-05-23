@@ -51,10 +51,14 @@
     function openRenamePopup() {
         showContextMenu = false;
         showRenamePopup = true;
-        setTimeout(() => {
-            const inputField = document.querySelector('input[name="text"]') as HTMLInputElement;
-            if (inputField) inputField.focus();
-        }, 100);
+
+        requestAnimationFrame(() => {
+            const inputField = document.getElementById('rename-input') as HTMLInputElement;
+            if (inputField) {
+                inputField.focus();
+                inputField.select();
+            }
+        });
     }
 
     function renameTab() {
@@ -154,6 +158,7 @@
             <div class="bg-rfe-base border shadow-lg rounded p-4 w-96" on:click|stopPropagation>
                 <h2 class="text-lg font-semibold mb-2">Rename Tab</h2>
                 <input
+                        id="rename-input"
                         bind:value={newTabName}
                         class="input h-[34px] text-[14px] w-full mb-3 text-rfe-text/60 bg-rfe-crust px-3 py-1 rounded-lg border border-white/10 focus:outline-none focus:ring-2 focus:ring-rfe-yellow focus:ring-offset-2 focus:ring-offset-rfe-crust transition-all duration-150 ease-in-out"
                         name="text"
