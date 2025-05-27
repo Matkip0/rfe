@@ -23,6 +23,7 @@ tauri-plugin-opener = "2"
 serde = { version = "1", features = ["derive"] }
 chrono = { version = "0.4.40", features = ["serde"] }
 anyhow = "1.0.98"
+pretty-bytes = "0.2.2"
 
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
 tauri-plugin-window-state = "2"

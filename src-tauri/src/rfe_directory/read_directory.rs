@@ -6,6 +6,7 @@ use std::path::{Path, PathBuf};
 use chrono::{DateTime, Local};
 use anyhow::{anyhow, Result};
 use serde::{Deserialize, Serialize};
+use pretty_bytes::converter::convert;
 
 #[cfg(any(target_os = "linux", target_os = "macos"))]
 use std::os::unix::fs::MetadataExt;
@@ -21,6 +22,8 @@ pub enum ItemType{
 pub struct Item{
     name: String,
     modified: DateTime<Local>,
+    modified_formated: String,
+    size_formated: String,
     item_type: ItemType,
     path: PathBuf,
 }
@@ -77,6 +80,8 @@ fn read_dir_entry(entry: DirEntry) -> Result<Item>{
     let new_item: Item = Item{
         name: item_name_as_string,
         modified: modified_date,
+        modified_formated: format!("{}", modified_date.format("%d.%m.%Y at %H.%M")),
+        size_formated: format_size(&item_type),
         item_type,
         path: entry_path
     };
@@ -106,4 +111,11 @@ fn find_item_type(entry_path: &PathBuf, entry_metadata: &Metadata) -> Result<Ite
     }
 
     Err("item could not be validated")
+}
+
+fn format_size(item_type: &ItemType) -> String {
+    match item_type { 
+        ItemType::File(file) => convert(file.size_in_bytes as f64),
+        ItemType::Directory(dir) => format!("{} items", dir.item_count)
+    }
 }
