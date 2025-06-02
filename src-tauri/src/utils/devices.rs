@@ -155,7 +155,7 @@ fn format_size(bytes: u64) -> String {
     const TIB: u64 = 1 << 40;
 
     if bytes >= TIB {
-        format!("{:.1} TB", bytes as f64 / TIB as f64)
+        format!("{:.1} TiB", bytes as f64 / TIB as f64)
     } else {
         format!("{:.0} GiB", bytes as f64 / GIB as f64)
     }
