@@ -1,33 +1,32 @@
 <script lang="ts">
     import {invoke} from "@tauri-apps/api/core";
-    interface directory {
+    interface Directory {
         itemCount: number
-        path: string
     }
 
-    interface file {
+    interface File {
         fileType: string
-        filePath: string
     }
 
-    interface item {
+    interface Item {
         name: string
-        size: string
-        modified: string
-        directory?: directory
-        file?: file
+        path: string
+        size_formated: string
+        modified_formated: string
+        directory?: Directory
+        file?: File
         selected: boolean
     }
 
-    interface sorting {
+    interface Sorting {
         sortBy: string
         ascending: boolean
     }
 
     let currentPath: string = $state("/")
-    let sorting: sorting = $state({sortBy: "name", ascending: true})
+    let sorting: Sorting = $state({sortBy: "name", ascending: true})
 
-    let items:item[] = $state([])
+    let items:Item[] = $state([])
 
     function sortBy(value: string) {
         if (sorting.sortBy === value){
@@ -40,25 +39,27 @@
         console.log(`sorting by ${value}`)
     }
 
-    function itemClicked(item: item) {
+    function itemClicked(item: Item) {
         items.forEach((value) => value.selected = false)
         item.selected = true
         console.log($state.snapshot(item))
 
     }
 
-    function itemDoubleClicked(item: item) {
+    function itemDoubleClicked(item: Item) {
+        currentPath += item.name + "/"
         if (typeof item.file !== "undefined")
             openFile(item.file)
         if (typeof item.directory !== "undefined")
             openDirectory(item.directory)
+        readDirectory()
     }
 
-    function openFile(file: file) {
+    function openFile(file: File) {
         //TODO: call rust code to open the file
     }
 
-    function openDirectory(dir: directory) {
+    function openDirectory(dir: Directory) {
 
     }
 
@@ -74,14 +75,47 @@
     }
 
     async function readDirectory() {
-        let item_names : string[]
+        let item_names: any
         item_names = await invoke("read_directory", { currentPath });
+        //items = item_names
+        //console.log($state.snapshot(items))
+        console.log(item_names)
         items = [];
-        item_names.forEach(value => items.push({name: value,
-            size: "24mb",
-            modified: "1970-01-01",
-            selected: false,
-            file: {fileType: "test", filePath: "/bla/bla"}}))
+        item_names.forEach((value:any) => {
+            items.push({
+                name: value.name,
+                path: value.path,
+                modified_formated: value.modified_formated,
+                size_formated: value.size_formated,
+                selected: false,
+                file: readFile(value.item_type.File),
+                directory: readDir(value.item_type.Directory),
+            })
+        })
+        console.log(items)
+    }
+    function readFile(valueItetmType: any)  {
+        if (typeof valueItetmType !== "undefined"){
+            let file : File
+             file = {
+                fileType: valueItetmType.file_type
+            }
+            return file
+        } else{
+            return undefined
+        }
+    }
+    function readDir(valueItetmType: any)  {
+        console.log(valueItetmType)
+        if (typeof valueItetmType !== "undefined"){
+            let dir : Directory
+            dir = {
+                itemCount: valueItetmType.item_count
+            }
+            return dir
+        } else{
+            return undefined
+        }
     }
 
     readDirectory()
@@ -138,8 +172,8 @@
                 onclick={() => itemClicked(item)}>
 
                 <td>{item.name}</td>
-                <td>{item.size}</td>
-                <td>{item.modified}</td>
+                <td>{item.size_formated}</td>
+                <td>{item.modified_formated}</td>
             </tr>
         {/each}
         </tbody>
